@@ -1,0 +1,243 @@
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  TalentLoop Design System — CSS Custom Properties                         */
+/*  Auto-generated from design-tokens.json                                   */
+/*  Generated: 2026-06-23                                                  */
+/*                                                                           */
+/*  COLOR ROLES: Semantic color tokens for UI usage (--tl-color-*).          */
+/*    - Primitives are resolved; only roles are exposed as variables.        */
+/*                                                                           */
+/*  TYPOGRAPHY: Full type scale (display → label, large → small) --tl-font-*. */
+/*    - Includes font-size, font-family, font-weight, line-height,           */
+/*      letter-spacing for each type style.                                  */
+/*                                                                           */
+/*  SYSTEM TOKENS: Spacing, radius, shadows, transitions, z-index, icons,    */
+/*    breakpoints (--tl-space-*, --tl-radius-*, --tl-shadow-*, etc.).        */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ════════════════════════════════════════════════════════════════ */
+  /* COLOR ROLES                                                     */
+  /* These are the semantic color tokens for UI usage.               */
+  /* Primitive palette values are resolved to their final hex values. */
+  /* ════════════════════════════════════════════════════════════════ */
+
+  /* ── Primary ─────────────────────────────────────────── */
+  --tl-color-primary: #2563eb;
+  --tl-color-primary-on-primary: #ffffff;
+  --tl-color-primary-primary-container: #d0defb;
+  --tl-color-primary-on-primary-container: #0d358c;
+
+  /* ── Secondary ───────────────────────────────────────── */
+  --tl-color-secondary: #14b8a6;
+  --tl-color-secondary-on-secondary: #ffffff;
+  --tl-color-secondary-secondary-container: #d1faf5;
+  --tl-color-secondary-on-secondary-container: #0f8a7c;
+
+  /* ── Tertiary ────────────────────────────────────────── */
+  --tl-color-tertiary: #c47e08;
+  --tl-color-tertiary-on-tertiary: #ffffff;
+  --tl-color-tertiary-tertiary-container: #fdecce;
+  --tl-color-tertiary-on-tertiary-container: #935f06;
+
+  /* ── Error ───────────────────────────────────────────── */
+  --tl-color-error: #c50707;
+  --tl-color-error-on-error: #ffffff;
+  --tl-color-error-error-container: #fdcece;
+  --tl-color-error-on-error-container: #940505;
+
+  /* ── Neutral ─────────────────────────────────────────── */
+  --tl-color-neutral: #f9fafa;
+  --tl-color-neutral-on-neutral: #2f3237;
+  --tl-color-neutral-neutral-container: #5e656e;
+  --tl-color-neutral-on-neutral-container: #e4e5e7;
+
+  /* ── Neutral variant ─────────────────────────────────── */
+  --tl-color-neutral-variant: #e6e6e6;
+  --tl-color-neutral-variant-on-neutral-variant: #4c4c4c;
+  --tl-color-neutral-variant-neutral-variant-container: #191919;
+  --tl-color-neutral-variant-on-neutral-variant-container: #f2f2f2;
+
+  /* ── Accent ──────────────────────────────────────────── */
+  --tl-color-accent: #bf03c9;
+  --tl-color-accent-on-accent: #ffffff;
+  --tl-color-accent-accent-container: #fccdfe;
+  --tl-color-accent-on-accent-container: #900297;
+
+  /* ── Success ─────────────────────────────────────────── */
+  --tl-color-success: #2ec804;
+  --tl-color-success-on-success: #ffffff;
+  --tl-color-success-success-container: #d8fecd;
+  --tl-color-success-on-success-container: #239603;
+
+  /* ── Warning ─────────────────────────────────────────── */
+  --tl-color-warning: #bdc606;
+  --tl-color-warning-on-warning: #ffffff;
+  --tl-color-warning-warning-container: #fbfecd;
+  --tl-color-warning-on-warning-container: #8e9504;
+
+  /* ════════════════════════════════════════════════════════════════ */
+  /* TYPOGRAPHY                                                      */
+  /* Type scale tokens: display, headline, title, body, label        */
+  /* ════════════════════════════════════════════════════════════════ */
+
+  /* ── Display ─────────────────────────────────────────── */
+  --tl-font-display-large-font-size: 64px;
+  --tl-font-display-large-font-family: 'Inter', sans-serif;
+  --tl-font-display-large-font-weight: 400;
+  --tl-font-display-large-font-style: normal;
+  --tl-font-display-large-letter-spacing: -1.92px;
+  --tl-font-display-large-line-height: 96px;
+  --tl-font-display-medium-font-size: 56px;
+  --tl-font-display-medium-font-family: 'Inter', sans-serif;
+  --tl-font-display-medium-font-weight: 400;
+  --tl-font-display-medium-font-style: normal;
+  --tl-font-display-medium-letter-spacing: -1.68px;
+  --tl-font-display-medium-line-height: 84px;
+  --tl-font-display-small-font-size: 48px;
+  --tl-font-display-small-font-family: 'Inter', sans-serif;
+  --tl-font-display-small-font-weight: 400;
+  --tl-font-display-small-font-style: normal;
+  --tl-font-display-small-letter-spacing: -1.44px;
+  --tl-font-display-small-line-height: 72px;
+
+  /* ── Headline ────────────────────────────────────────── */
+  --tl-font-headline-large-font-size: 42px;
+  --tl-font-headline-large-font-family: 'Inter', sans-serif;
+  --tl-font-headline-large-font-weight: 400;
+  --tl-font-headline-large-font-style: normal;
+  --tl-font-headline-large-letter-spacing: -1.26px;
+  --tl-font-headline-large-line-height: 63px;
+  --tl-font-headline-medium-font-size: 36px;
+  --tl-font-headline-medium-font-family: 'Inter', sans-serif;
+  --tl-font-headline-medium-font-weight: 400;
+  --tl-font-headline-medium-font-style: normal;
+  --tl-font-headline-medium-letter-spacing: -1.08px;
+  --tl-font-headline-medium-line-height: 54px;
+  --tl-font-headline-small-font-size: 32px;
+  --tl-font-headline-small-font-family: 'Inter', sans-serif;
+  --tl-font-headline-small-font-weight: 400;
+  --tl-font-headline-small-font-style: normal;
+  --tl-font-headline-small-letter-spacing: -0.96px;
+  --tl-font-headline-small-line-height: 48px;
+
+  /* ── Title ───────────────────────────────────────────── */
+  --tl-font-title-large-font-size: 28px;
+  --tl-font-title-large-font-family: 'Inter', sans-serif;
+  --tl-font-title-large-font-weight: 500;
+  --tl-font-title-large-font-style: normal;
+  --tl-font-title-large-letter-spacing: -0.56px;
+  --tl-font-title-large-line-height: 42px;
+  --tl-font-title-medium-font-size: 24px;
+  --tl-font-title-medium-font-family: 'Inter', sans-serif;
+  --tl-font-title-medium-font-weight: 500;
+  --tl-font-title-medium-font-style: normal;
+  --tl-font-title-medium-letter-spacing: -0.48px;
+  --tl-font-title-medium-line-height: 36px;
+  --tl-font-title-small-font-size: 22px;
+  --tl-font-title-small-font-family: 'Inter', sans-serif;
+  --tl-font-title-small-font-weight: 500;
+  --tl-font-title-small-font-style: normal;
+  --tl-font-title-small-letter-spacing: -0.44px;
+  --tl-font-title-small-line-height: 33px;
+
+  /* ── Body ────────────────────────────────────────────── */
+  --tl-font-body-large-font-size: 20px;
+  --tl-font-body-large-font-family: 'Inter', sans-serif;
+  --tl-font-body-large-font-weight: 400;
+  --tl-font-body-large-font-style: normal;
+  --tl-font-body-large-letter-spacing: -0.6px;
+  --tl-font-body-large-line-height: 30px;
+  --tl-font-body-medium-font-size: 18px;
+  --tl-font-body-medium-font-family: 'Inter', sans-serif;
+  --tl-font-body-medium-font-weight: 400;
+  --tl-font-body-medium-font-style: normal;
+  --tl-font-body-medium-letter-spacing: -0.54px;
+  --tl-font-body-medium-line-height: 27px;
+  --tl-font-body-small-font-size: 16px;
+  --tl-font-body-small-font-family: 'Inter', sans-serif;
+  --tl-font-body-small-font-weight: 400;
+  --tl-font-body-small-font-style: normal;
+  --tl-font-body-small-letter-spacing: -0.48px;
+  --tl-font-body-small-line-height: 24px;
+
+  /* ── Label ───────────────────────────────────────────── */
+  --tl-font-label-large-font-size: 16px;
+  --tl-font-label-large-font-family: 'Inter', sans-serif;
+  --tl-font-label-large-font-weight: 400;
+  --tl-font-label-large-font-style: normal;
+  --tl-font-label-large-letter-spacing: -0.48px;
+  --tl-font-label-large-line-height: 24px;
+  --tl-font-label-medium-font-size: 14px;
+  --tl-font-label-medium-font-family: 'Inter', sans-serif;
+  --tl-font-label-medium-font-weight: 400;
+  --tl-font-label-medium-font-style: normal;
+  --tl-font-label-medium-letter-spacing: -0.42px;
+  --tl-font-label-medium-line-height: 21px;
+  --tl-font-label-small-font-size: 12px;
+  --tl-font-label-small-font-family: 'Inter', sans-serif;
+  --tl-font-label-small-font-weight: 400;
+  --tl-font-label-small-font-style: normal;
+  --tl-font-label-small-letter-spacing: -0.36px;
+  --tl-font-label-small-line-height: 18px;
+
+  /* ════════════════════════════════════════════════════════════════ */
+  /* SYSTEM TOKENS                                                   */
+  /* Spacing, radius, shadows, transitions, z-index, icons, breakpoints */
+  /* ════════════════════════════════════════════════════════════════ */
+
+  /* ── Spacing ──────────────────────────────────────── */
+  --tl-space-1: 4px;
+  --tl-space-2: 8px;
+  --tl-space-3: 12px;
+  --tl-space-4: 16px;
+  --tl-space-5: 20px;
+  --tl-space-6: 24px;
+  --tl-space-8: 32px;
+  --tl-space-10: 40px;
+  --tl-space-12: 48px;
+  --tl-space-16: 64px;
+  --tl-space-20: 80px;
+  --tl-space-24: 96px;
+
+  /* ── Border & Radius ───────────────────────────────── */
+  --tl-radius-sm: 4px;
+  --tl-radius-md: 8px;
+  --tl-radius-lg: 12px;
+  --tl-radius-xl: 16px;
+  --tl-radius-2xl: 24px;
+  --tl-radius-full: 9999px;
+  --tl-border-width: 1px;
+  --tl-border-width-thick: 2px;
+
+  /* ── Shadows ───────────────────────────────────────── */
+  --tl-shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --tl-shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --tl-shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --tl-shadow-focus: 0 0 0 3px rgba(37,99,235,0.3);
+
+  /* ── Transitions ───────────────────────────────────── */
+  --tl-transition-fast: 100ms ease;
+  --tl-transition-base: 200ms ease;
+  --tl-transition-slow: 350ms ease;
+
+  /* ── Z-Index ───────────────────────────────────────── */
+  --tl-z-base: 0;
+  --tl-z-above: 10;
+  --tl-z-dropdown: 100;
+  --tl-z-modal: 200;
+  --tl-z-toast: 300;
+  --tl-z-overlay: 400;
+
+  /* ── Icons ─────────────────────────────────────────── */
+  --tl-icon-sm: 16px;
+  --tl-icon-md: 20px;
+  --tl-icon-lg: 24px;
+
+  /* ── Breakpoints ───────────────────────────────────── */
+  --tl-bp-sm: 375px;
+  --tl-bp-md: 768px;
+  --tl-bp-lg: 1024px;
+  --tl-bp-xl: 1280px;
+
+}

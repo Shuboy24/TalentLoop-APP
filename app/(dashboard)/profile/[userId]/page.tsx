@@ -1,0 +1,115 @@
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { MapPin, Star } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { notFound } from "next/navigation";
+
+export default async function PublicProfilePage({ params }: { params: { userId: string } }) {
+  const session = await auth();
+  if (!session?.user?.id) return null;
+
+  if (params.userId === session.user.id) {
+    // If it's my own ID, redirect to /profile
+    return (
+      <div className="text-center p-8">
+        <Link href="/profile" className="text-primary hover:underline">Go to My Profile</Link>
+      </div>
+    );
+  }
+
+  const user = await db.user.findUnique({
+    where: { id: params.userId },
+    include: {
+      userSkills: {
+        include: { skill: true }
+      }
+    }
+  });
+
+  if (!user || user.isSuspended || !user.onboardingComplete) {
+    notFound();
+  }
+
+  const offeredSkills = user.userSkills.filter(s => s.type === "OFFERED");
+  const neededSkills = user.userSkills.filter(s => s.type === "NEEDED");
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-card border border-neutral-variant rounded-xl p-8 shadow-tl-sm">
+        <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-8">
+          <div className="w-32 h-32 rounded-full bg-neutral overflow-hidden shrink-0 mb-4 md:mb-0">
+            {user.avatarUrl ? (
+              <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-neutral-variant-on text-display-md font-medium">
+                {user.name.charAt(0)}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-headline-md font-bold text-neutral-on">{user.name}</h1>
+            <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-4 mt-2 text-neutral-variant-on">
+              <div className="flex items-center text-body-sm">
+                <MapPin className="w-4 h-4 mr-1" />
+                {user.location || "Location not specified"}
+              </div>
+              <div className="flex items-center text-tertiary font-medium text-body-sm mt-1 md:mt-0">
+                <Star className="w-4 h-4 mr-1 fill-current" />
+                {user.trustScore?.toString()} Trust Score
+              </div>
+            </div>
+            
+            <p className="mt-4 text-body-md text-neutral-on max-w-2xl">
+              {user.bio || "No bio provided."}
+            </p>
+          </div>
+
+          <div className="mt-6 md:mt-0">
+            <Link href={`/trades/propose?user=${user.id}`}>
+              <Button className="bg-tertiary text-tertiary-on hover:bg-tertiary/90">
+                Propose Trade
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-card border border-neutral-variant rounded-xl p-6 shadow-tl-sm">
+          <h2 className="text-title-lg font-bold text-neutral-on mb-4">Skills They Offer</h2>
+          <div className="flex flex-wrap gap-2">
+            {offeredSkills.map(s => (
+              <span key={s.skillId} className="bg-primary-container text-primary px-3 py-1 rounded-full text-label-md font-medium">
+                {s.skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="bg-card border border-neutral-variant rounded-xl p-6 shadow-tl-sm">
+          <h2 className="text-title-lg font-bold text-neutral-on mb-4">Skills They Need</h2>
+          {user.userSkills.length === 0 ? (
+            <p className="text-body-sm text-neutral-variant-on">No skills added yet.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {neededSkills.map((s) => (
+                <span key={s.skillId} className="bg-secondary-container text-secondary px-3 py-1 rounded-full text-label-md font-medium">
+                  {s.skill.name}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className="md:col-span-2 bg-card border border-neutral-variant rounded-xl p-6 shadow-tl-sm">
+          <h2 className="text-title-lg font-bold text-neutral-on mb-4">Availability</h2>
+          <p className="text-body-md text-neutral-on">
+            {user.availability || "Not specified"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
