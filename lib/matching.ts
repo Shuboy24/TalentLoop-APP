@@ -81,7 +81,7 @@ export async function getMatches(currentUserId: string): Promise<MatchResult[]> 
       : 0;
 
     // Reputation (trust score is 0-100, we normalize to 0-1)
-    const reputation = user.trustScore / 100;
+    const reputation = user.trustScore.toNumber() / 100;
 
     // Availability (simplified for MVP: 1 if both provided availability, else 0.5)
     const availability = (currentUser.availability && user.availability) ? 1.0 : 0.5;
@@ -100,10 +100,10 @@ export async function getMatches(currentUserId: string): Promise<MatchResult[]> 
       avatarUrl: user.avatarUrl,
       bio: user.bio,
       location: user.location,
-      trustScore: user.trustScore,
+      trustScore: user.trustScore.toNumber(),
       score: Math.round(rawScore * 100),
-      offeredSkills: user.skills.filter(s => s.type === "OFFERED").map(s => ({ id: s.skillId, name: s.skill.name })),
-      neededSkills: user.skills.filter(s => s.type === "NEEDED").map(s => ({ id: s.skillId, name: s.skill.name })),
+      offeredSkills: user.userSkills.filter(s => s.type === "OFFERED").map(s => ({ id: s.skillId, name: s.skill.name })),
+      neededSkills: user.userSkills.filter(s => s.type === "NEEDED").map(s => ({ id: s.skillId, name: s.skill.name })),
     });
   }
 

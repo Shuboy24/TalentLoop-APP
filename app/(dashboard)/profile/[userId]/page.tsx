@@ -5,11 +5,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 
-export default async function PublicProfilePage({ params }: { params: { userId: string } }) {
+export default async function PublicProfilePage({ params }: { params: Promise<{ userId: string }> }) {
   const session = await auth();
   if (!session?.user?.id) return null;
 
-  if (params.userId === session.user.id) {
+  const { userId } = await params;
+
+  if (userId === session.user.id) {
     // If it's my own ID, redirect to /profile
     return (
       <div className="text-center p-8">
@@ -19,7 +21,7 @@ export default async function PublicProfilePage({ params }: { params: { userId: 
   }
 
   const user = await db.user.findUnique({
-    where: { id: params.userId },
+    where: { id: userId },
     include: {
       userSkills: {
         include: { skill: true }
@@ -67,7 +69,7 @@ export default async function PublicProfilePage({ params }: { params: { userId: 
           </div>
 
           <div className="mt-6 md:mt-0">
-            <Link href={`/trades/propose?user=${user.id}`}>
+            <Link href={`/proposals/new/${user.id}`}>
               <Button className="bg-tertiary text-tertiary-on hover:bg-tertiary/90">
                 Propose Trade
               </Button>

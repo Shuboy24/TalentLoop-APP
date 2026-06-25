@@ -11,14 +11,22 @@ import { MessageInput } from "@/components/messaging/MessageInput";
 // We need a client wrapper for the messaging part
 import { TradeMessaging } from "./TradeMessaging";
 
-export default async function TradeDetailsPage({ params }: { params: { tradeId: string } }) {
+export default async function TradeDetailsPage({ params }: { params: Promise<{ tradeId: string }> }) {
   const session = await auth();
   if (!session?.user?.id) {
     redirect("/login");
   }
 
+  const { tradeId } = await params;
+
+  // Validate UUID to prevent Prisma crash on invalid IDs
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(tradeId)) {
+    return <div className="p-8 text-center text-error">Invalid Trade ID</div>;
+  }
+
   const trade = await db.trade.findUnique({
-    where: { id: params.tradeId },
+    where: { id: tradeId },
     include: {
       userA: { select: { id: true, name: true, avatarUrl: true } },
       userB: { select: { id: true, name: true, avatarUrl: true } },
@@ -41,7 +49,7 @@ export default async function TradeDetailsPage({ params }: { params: { tradeId: 
 
   const isUserA = session.user.id === trade.userAId;
   const otherUser = isUserA ? trade.userB : trade.userA;
-  const myDelivered = isUserA ? trade.userADelivered : trade.userBDelivered;
+  const myDelivered = isUserA ? trade.userADeliveryConfirmed : trade.userBDeliveryConfirmed;
 
   // Render
   return (

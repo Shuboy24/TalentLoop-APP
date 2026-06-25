@@ -2,15 +2,17 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { tradeId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    const { tradeId } = await params;
+
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId }
+      where: { id: tradeId }
     });
 
     if (!trade) {
@@ -22,7 +24,7 @@ export async function GET(request: Request, { params }: { params: { tradeId: str
     }
 
     const messages = await db.message.findMany({
-      where: { tradeId: params.tradeId },
+      where: { tradeId: tradeId },
       include: {
         sender: { select: { id: true, name: true, avatarUrl: true } }
       },

@@ -4,19 +4,21 @@ import { db } from "@/lib/db";
 import { ProposalForm } from "@/components/trades/ProposalForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default async function NewProposalPage({ params }: { params: { receiverId: string } }) {
+export default async function NewProposalPage({ params }: { params: Promise<{ receiverId: string }> }) {
   const session = await auth();
   if (!session?.user?.id) {
     redirect("/login");
   }
 
-  if (session.user.id === params.receiverId) {
+  const { receiverId } = await params;
+
+  if (session.user.id === receiverId) {
     redirect("/dashboard"); // Can't propose to self
   }
 
   const [receiver, currentUserSkills, receiverSkills] = await Promise.all([
     db.user.findUnique({
-      where: { id: params.receiverId },
+      where: { id: receiverId },
       select: { id: true, name: true, avatarUrl: true }
     }),
     db.userSkill.findMany({
@@ -24,7 +26,7 @@ export default async function NewProposalPage({ params }: { params: { receiverId
       include: { skill: true }
     }),
     db.userSkill.findMany({
-      where: { userId: params.receiverId, type: "OFFERED" },
+      where: { userId: receiverId, type: "OFFERED" },
       include: { skill: true }
     })
   ]);

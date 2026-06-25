@@ -76,7 +76,7 @@ export function MatchCard({ match }: { match: MatchResult }) {
       </div>
 
       <div className="mt-6 pt-4 border-t border-neutral-variant">
-        <Link href={`/trades/propose?user=${match.userId}`} className="w-full block">
+        <Link href={`/proposals/new/${match.userId}`} className="w-full block">
           <Button className="w-full bg-tertiary text-tertiary-on hover:bg-tertiary/90">
             Propose Trade
           </Button>

@@ -46,7 +46,12 @@ export function ProposalCard({ proposal, currentUserId }: { proposal: Proposal; 
         body: JSON.stringify({ action }),
       });
       if (res.ok) {
-        router.refresh();
+        const result = await res.json();
+        if (action === "accept" && result.data?.id) {
+          router.push(`/trades/${result.data.id}`);
+        } else {
+          router.refresh();
+        }
       }
     } catch (e) {
       console.error(e);

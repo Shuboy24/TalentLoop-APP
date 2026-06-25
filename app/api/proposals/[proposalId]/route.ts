@@ -3,15 +3,17 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { respondToProposalSchema } from "@/lib/validations/proposal";
 
-export async function GET(request: Request, { params }: { params: { proposalId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ proposalId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    const { proposalId } = await params;
+
     const proposal = await db.tradeProposal.findUnique({
-      where: { id: params.proposalId },
+      where: { id: proposalId },
       include: {
         sender: { select: { id: true, name: true, avatarUrl: true, trustScore: true, reputationLevel: true } },
         receiver: { select: { id: true, name: true, avatarUrl: true, trustScore: true, reputationLevel: true } },
@@ -35,12 +37,14 @@ export async function GET(request: Request, { params }: { params: { proposalId: 
   }
 }
 
-export async function PATCH(request: Request, { params }: { params: { proposalId: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ proposalId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
+
+    const { proposalId } = await params;
 
     const body = await request.json();
     const parsed = respondToProposalSchema.safeParse(body);
@@ -52,7 +56,7 @@ export async function PATCH(request: Request, { params }: { params: { proposalId
     const { action, declineReason } = parsed.data;
 
     const proposal = await db.tradeProposal.findUnique({
-      where: { id: params.proposalId }
+      where: { id: proposalId }
     });
 
     if (!proposal) {
