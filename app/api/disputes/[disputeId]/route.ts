@@ -1,9 +1,9 @@
-import { NextResponse } from "next/response";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { resolveDisputeSchema } from "@/lib/validations/dispute";
 
-export async function GET(req: Request, { params }: { params: { disputeId: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ disputeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -41,7 +41,7 @@ export async function GET(req: Request, { params }: { params: { disputeId: strin
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: { disputeId: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ disputeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id || !session.user.isAdmin) {

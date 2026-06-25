@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const parsed = avatarSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.message }, { status: 400 });
     }
 
     await db.user.update({

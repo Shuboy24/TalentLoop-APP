@@ -3,15 +3,16 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
-export async function GET(request: Request, { params }: { params: { tradeId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    const { tradeId } = await params;
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId },
+      where: { id: tradeId },
       include: {
         userA: { select: { id: true, name: true, avatarUrl: true, email: true, trustScore: true, reputationLevel: true } },
         userB: { select: { id: true, name: true, avatarUrl: true, email: true, trustScore: true, reputationLevel: true } },
@@ -43,7 +44,7 @@ const updateStatusSchema = z.object({
   status: z.enum(["Cancelled"]) // For now, users can only voluntarily cancel. Delivery and disputes have their own endpoints.
 });
 
-export async function PATCH(request: Request, { params }: { params: { tradeId: string } }) {
+export async function PATCH(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
@@ -54,11 +55,12 @@ export async function PATCH(request: Request, { params }: { params: { tradeId: s
     const parsed = updateStatusSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.message }, { status: 400 });
     }
 
+    const { tradeId } = await params;
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId }
+      where: { id: tradeId }
     });
 
     if (!trade) {

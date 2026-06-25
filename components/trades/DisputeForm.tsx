@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createDisputeSchema, CreateDisputeFormValues, disputeReasonEnum } from "@/lib/validations/dispute";
+import { createDisputeSchema, disputeReasonEnum } from "@/lib/validations/dispute";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -22,7 +23,7 @@ export function DisputeForm({ tradeId, onSuccess, onCancel }: DisputeFormProps) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const form = useForm<CreateDisputeFormValues>({
+  const form = useForm<z.infer<typeof createDisputeSchema>>({
     resolver: zodResolver(createDisputeSchema),
     defaultValues: {
       tradeId,
@@ -31,7 +32,7 @@ export function DisputeForm({ tradeId, onSuccess, onCancel }: DisputeFormProps) 
     },
   });
 
-  const onSubmit = async (data: CreateDisputeFormValues) => {
+  const onSubmit = async (data: z.infer<typeof createDisputeSchema>) => {
     setIsSubmitting(true);
     setError("");
 

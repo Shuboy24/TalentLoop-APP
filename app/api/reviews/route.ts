@@ -1,4 +1,4 @@
-import { NextResponse } from "next/response";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createReviewSchema } from "@/lib/validations/review";

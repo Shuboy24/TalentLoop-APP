@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: { tradeId: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    const { tradeId } = await params;
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId }
+      where: { id: tradeId }
     });
 
     if (!trade) {
@@ -29,15 +30,15 @@ export async function POST(request: Request, { params }: { params: { tradeId: st
     const isUserB = trade.userBId === session.user.id;
 
     // Check if they already marked it delivered
-    if ((isUserA && trade.userADelivered) || (isUserB && trade.userBDelivered)) {
+    if ((isUserA && trade.userADeliveryConfirmed) || (isUserB && trade.userBDeliveryConfirmed)) {
       return NextResponse.json({ success: false, error: "You already marked your part as delivered" }, { status: 400 });
     }
 
     const dataToUpdate: any = {};
-    if (isUserA) dataToUpdate.userADelivered = true;
-    if (isUserB) dataToUpdate.userBDelivered = true;
+    if (isUserA) dataToUpdate.userADeliveryConfirmed = true;
+    if (isUserB) dataToUpdate.userBDeliveryConfirmed = true;
 
-    const willBeFullyComplete = (isUserA || trade.userADelivered) && (isUserB || trade.userBDelivered);
+    const willBeFullyComplete = (isUserA || trade.userADeliveryConfirmed) && (isUserB || trade.userBDeliveryConfirmed);
 
     if (willBeFullyComplete) {
       dataToUpdate.status = "Completed";
@@ -56,14 +57,14 @@ export async function POST(request: Request, { params }: { params: { tradeId: st
       if (willBeFullyComplete) {
         // Award 10 points to both users
         await tx.talentPointTransaction.create({
-          data: { userId: trade.userAId, amount: 10, reason: "Trade completed", tradeId: trade.id }
+          data: { userId: trade.userAId, points: 10, type: "earned", tradeId: trade.id }
         });
-        await tx.user.update({ where: { id: trade.userAId }, data: { talentPoints: { increment: 10 } } });
+        await tx.user.update({ where: { id: trade.userAId }, data: { talentPointsBalance: { increment: 10 } } });
 
         await tx.talentPointTransaction.create({
-          data: { userId: trade.userBId, amount: 10, reason: "Trade completed", tradeId: trade.id }
+          data: { userId: trade.userBId, points: 10, type: "earned", tradeId: trade.id }
         });
-        await tx.user.update({ where: { id: trade.userBId }, data: { talentPoints: { increment: 10 } } });
+        await tx.user.update({ where: { id: trade.userBId }, data: { talentPointsBalance: { increment: 10 } } });
 
         // Notify both parties
         await tx.notification.create({

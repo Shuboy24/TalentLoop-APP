@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Upload, X } from "lucide-react";
 
 type ImageUploadProps = {
@@ -89,10 +89,8 @@ export function ImageUpload({ currentImageUrl, onUploadSuccess, onRemove }: Imag
           onChange={handleFileChange}
           disabled={isUploading}
         />
-        <label htmlFor="avatar-upload">
-          <Button type="button" variant="outline" size="sm" asChild disabled={isUploading}>
+        <label htmlFor="avatar-upload" className={buttonVariants({ variant: "outline", size: "sm" }) + (isUploading ? " opacity-50 pointer-events-none" : " cursor-pointer")}>
             <span>{isUploading ? "Uploading..." : currentImageUrl ? "Change Avatar" : "Upload Avatar"}</span>
-          </Button>
         </label>
       </div>
       

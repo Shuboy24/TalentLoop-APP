@@ -8,6 +8,6 @@ declare module "next-auth" {
       emailVerified?: boolean;
       onboardingComplete?: boolean;
       isSuspended?: boolean;
-    } & DefaultSession["user"]
+    } & Omit<DefaultSession["user"], "emailVerified">
   }
 }

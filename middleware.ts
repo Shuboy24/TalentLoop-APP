@@ -19,6 +19,9 @@ export async function middleware(request: NextRequest) {
   // Protect dashboard routes
   if (pathname === "/" || pathname.startsWith("/profile") || pathname.startsWith("/trades") || pathname.startsWith("/skills") || pathname.startsWith("/notifications") || pathname.startsWith("/settings")) {
     if (!token) {
+      if (pathname === "/") {
+        return NextResponse.redirect(new URL("/welcome", request.url));
+      }
       return NextResponse.redirect(new URL("/login", request.url));
     }
     // Check onboarding logic inside layout.tsx since middleware edge runtime can't easily query Prisma
@@ -31,8 +34,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // Redirect authenticated users away from auth pages
-  if (token && (pathname.startsWith("/login") || pathname.startsWith("/sign-up") || pathname === "/reset-password")) {
+  // Redirect authenticated users away from auth & welcome pages
+  if (token && (pathname.startsWith("/login") || pathname.startsWith("/sign-up") || pathname === "/reset-password" || pathname === "/welcome")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
@@ -52,5 +55,6 @@ export const config = {
     "/login",
     "/sign-up",
     "/reset-password",
+    "/welcome",
   ],
 };

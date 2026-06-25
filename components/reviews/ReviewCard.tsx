@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { StarRating } from "./StarRating";
 import Link from "next/link";
-import { formatDistanceToNow } from "date-fns";
 
 type ReviewCardProps = {
   review: {
@@ -35,9 +34,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
               <Link href={`/profile/${review.reviewer.id}`} className="font-medium text-body-md hover:underline">
                 {review.reviewer.name}
               </Link>
-              <div className="text-label-sm text-neutral-variant-on">
-                {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
-              </div>
+                {new Date(review.createdAt).toLocaleDateString()}
             </div>
             <StarRating rating={review.rating} size="sm" />
           </div>

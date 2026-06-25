@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MAX_DELIVERABLES_LENGTH, MAX_OPTIONAL_NOTE_LENGTH } from "@/lib/constants";
 
-type ProposalFormValues = z.infer<typeof createProposalSchema>;
+
 
 type SkillOption = {
   id: string; // The Skill ID
@@ -40,7 +40,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ProposalFormValues>({
+  } = useForm<z.infer<typeof createProposalSchema>>({
     resolver: zodResolver(createProposalSchema),
     defaultValues: {
       timelineDays: 7,
@@ -52,7 +52,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
   const receiverDeliverablesLength = watch("receiverDeliverables", "")?.length || 0;
   const noteLength = watch("optionalNote", "")?.length || 0;
 
-  const onSubmit = async (data: ProposalFormValues) => {
+  const onSubmit = async (data: z.infer<typeof createProposalSchema>) => {
     setError(null);
     try {
       const res = await fetch("/api/proposals", {
@@ -146,7 +146,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
             <Label>Timeline (Days)</Label>
             <Input 
               type="number" 
-              {...register("timelineDays")}
+              {...register("timelineDays", { valueAsNumber: true })}
               className={errors.timelineDays ? "border-error" : ""}
             />
             {errors.timelineDays && <p className="text-label-sm text-error">{errors.timelineDays.message}</p>}
@@ -156,7 +156,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
             <Label>Acceptance Deadline</Label>
             <Input 
               type="date" 
-              {...register("acceptanceDeadline")}
+              {...register("acceptanceDeadline", { valueAsDate: true })}
               className={errors.acceptanceDeadline ? "border-error" : ""}
             />
             {errors.acceptanceDeadline && <p className="text-label-sm text-error">{errors.acceptanceDeadline.message}</p>}

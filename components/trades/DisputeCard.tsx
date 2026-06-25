@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card";
-import { formatDistanceToNow } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, CheckCircle } from "lucide-react";
 
@@ -48,9 +47,9 @@ export function DisputeCard({ dispute }: DisputeCardProps) {
         )}
 
         <div className="text-label-sm text-neutral-variant-on">
-          Opened {formatDistanceToNow(new Date(dispute.createdAt), { addSuffix: true })}
+          Opened {new Date(dispute.createdAt).toLocaleDateString()}
           {isResolved && dispute.resolvedAt && (
-            <> • Resolved {formatDistanceToNow(new Date(dispute.resolvedAt), { addSuffix: true })}</>
+            <> • Resolved {new Date(dispute.resolvedAt).toLocaleDateString()}</>
           )}
         </div>
       </div>
