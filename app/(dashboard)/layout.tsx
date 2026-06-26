@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { LogOut, Home, User, Briefcase, Bell, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/shared/Logo";
 
 function NavLink({ href, icon: Icon, label }: { href: string; icon: any; label: string }) {
   return (
@@ -30,8 +31,8 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       {/* Sidebar */}
       <aside className="w-64 border-r border-neutral-variant bg-card flex flex-col hidden md:flex">
         <div className="h-16 flex items-center px-6 border-b border-neutral-variant">
-          <Link href="/" className="text-primary font-heading font-bold text-title-lg">
-            TalentLoop
+          <Link href="/">
+            <Logo />
           </Link>
         </div>
         
@@ -107,8 +108,8 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       <main className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header */}
         <header className="h-16 border-b border-neutral-variant bg-card flex items-center px-4 md:hidden">
-          <Link href="/" className="text-primary font-heading font-bold text-title-md">
-            TalentLoop
+          <Link href="/">
+            <Logo />
           </Link>
         </header>
 

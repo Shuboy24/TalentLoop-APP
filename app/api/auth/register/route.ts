@@ -50,10 +50,28 @@ export async function POST(request: Request) {
     });
 
     const verificationUrl = `${process.env.NEXTAUTH_URL}/verify-email?token=${token}`;
+    
+    // Send verification email
     await sendEmail({
       to: email,
       subject: "Verify your TalentLoop account",
       html: `<p>Click <a href="${verificationUrl}">here</a> to verify your email.</p>`
+    });
+
+    // Send welcome email
+    const firstName = name.split(" ")[0] || "there";
+    await sendEmail({
+      to: email,
+      subject: "Welcome to TalentLoop!",
+      html: `
+        <h2>Welcome to TalentLoop, ${firstName}!</h2>
+        <p>We're thrilled to have you join our community.</p>
+        <p>TalentLoop is all about exchanging skills and creating value together without money changing hands.</p>
+        <p>Get started by completing your profile and proposing your first trade!</p>
+        <br/>
+        <p>Best regards,</p>
+        <p>The TalentLoop Team</p>
+      `
     });
 
     return NextResponse.json({ success: true, data: { userId: user.id } });

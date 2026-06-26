@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createProposalSchema } from "@/lib/validations/proposal";
 import { PROPOSAL_EXPIRY_DAYS } from "@/lib/constants";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request) {
   try {
@@ -85,15 +86,13 @@ export async function POST(request: Request) {
       }
     });
 
-    // Send notification
-    await db.notification.create({
-      data: {
-        userId: receiverId,
-        type: "proposal_received",
-        title: "New Trade Proposal",
-        body: `${session.user.name || 'Someone'} proposed a new trade!`,
-        link: `/trades`
-      }
+    // Send notification and email
+    await createNotification({
+      userId: receiverId,
+      type: "proposal_received",
+      title: "New Trade Proposal",
+      body: `${session.user.name || 'Someone'} proposed a new trade!`,
+      link: `/trades`
     });
 
     return NextResponse.json({ success: true, data: proposal });

@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
+import { Logo } from "@/components/shared/Logo";
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex items-center justify-between p-6 border-b border-neutral-variant bg-white">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-            <span className="text-white font-bold text-lg leading-none">T</span>
-          </div>
-          <span className="text-title-medium font-bold tracking-tight text-neutral-on">TalentLoop</span>
-        </div>
+        <Logo />
         <nav className="flex items-center gap-4">
           <Link href="/login" className="text-body-sm font-medium text-neutral-variant-on hover:text-primary transition-colors">
             Log in

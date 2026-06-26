@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { LogOut, LayoutDashboard, Users, Briefcase, AlertTriangle, List, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/shared/Logo";
 
 function NavLink({ href, icon: Icon, label }: { href: string; icon: any; label: string }) {
   return (
@@ -30,8 +31,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       {/* Sidebar */}
       <aside className="w-64 border-r border-neutral-variant bg-card flex flex-col hidden md:flex">
         <div className="h-16 flex items-center px-6 border-b border-neutral-variant">
-          <Link href="/admin" className="text-primary font-heading font-bold text-title-lg">
-            TalentLoop Admin
+          <Link href="/admin" className="flex items-center gap-2">
+            <Logo />
+            <span className="text-body-sm font-semibold text-neutral-variant-on mt-1 uppercase tracking-widest">Admin</span>
           </Link>
         </div>
         
@@ -78,8 +80,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
       <main className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header */}
         <header className="h-16 border-b border-neutral-variant bg-card flex items-center px-4 md:hidden">
-          <Link href="/admin" className="text-primary font-heading font-bold text-title-md">
-            TalentLoop Admin
+          <Link href="/admin" className="flex items-center gap-2">
+            <Logo />
+            <span className="text-body-sm font-semibold text-neutral-variant-on mt-1 uppercase tracking-widest">Admin</span>
           </Link>
         </header>
 

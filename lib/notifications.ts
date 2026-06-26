@@ -12,7 +12,8 @@ type NotificationType =
   | "trade_completed"
   | "review_reminder"
   | "dispute_raised"
-  | "dispute_resolved";
+  | "dispute_resolved"
+  | "delivery_update";
 
 export async function createNotification({
   userId,

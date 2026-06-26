@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { createNotification } from "@/lib/notifications";
 
 export async function POST(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
@@ -52,8 +53,6 @@ export async function POST(request: Request, { params }: { params: Promise<{ tra
         data: dataToUpdate
       });
 
-      const otherUserId = trade.userAId === session.user.id ? trade.userBId : trade.userAId;
-      
       if (willBeFullyComplete) {
         // Award 10 points to both users
         await tx.talentPointTransaction.create({
@@ -65,41 +64,39 @@ export async function POST(request: Request, { params }: { params: Promise<{ tra
           data: { userId: trade.userBId, points: 10, type: "earned", tradeId: trade.id }
         });
         await tx.user.update({ where: { id: trade.userBId }, data: { talentPointsBalance: { increment: 10 } } });
-
-        // Notify both parties
-        await tx.notification.create({
-          data: {
-            userId: trade.userAId,
-            type: "trade_completed",
-            title: "Trade Completed!",
-            body: "Your trade has been completed! 10 Talent Points awarded.",
-            link: `/trades/${trade.id}`
-          }
-        });
-        await tx.notification.create({
-          data: {
-            userId: trade.userBId,
-            type: "trade_completed",
-            title: "Trade Completed!",
-            body: "Your trade has been completed! 10 Talent Points awarded.",
-            link: `/trades/${trade.id}`
-          }
-        });
-      } else {
-        // Notify other user that partner delivered
-        await tx.notification.create({
-          data: {
-            userId: otherUserId,
-            type: "delivery_update",
-            title: "Partner Delivered",
-            body: `${session.user.name || 'Your partner'} marked their part as completed. Please confirm yours.`,
-            link: `/trades/${trade.id}`
-          }
-        });
       }
 
       return [updated];
     });
+
+    const otherUserId = trade.userAId === session.user.id ? trade.userBId : trade.userAId;
+
+    if (willBeFullyComplete) {
+      // Notify both parties
+      await createNotification({
+        userId: trade.userAId,
+        type: "trade_completed",
+        title: "Trade Completed!",
+        body: "Your trade has been completed! 10 Talent Points awarded.",
+        link: `/trades/${trade.id}`
+      });
+      await createNotification({
+        userId: trade.userBId,
+        type: "trade_completed",
+        title: "Trade Completed!",
+        body: "Your trade has been completed! 10 Talent Points awarded.",
+        link: `/trades/${trade.id}`
+      });
+    } else {
+      // Notify other user that partner delivered
+      await createNotification({
+        userId: otherUserId,
+        type: "delivery_update",
+        title: "Partner Delivered",
+        body: `${session.user.name || 'Your partner'} marked their part as completed. Please confirm yours.`,
+        link: `/trades/${trade.id}`
+      });
+    }
 
     return NextResponse.json({ success: true, data: updatedTrade });
   } catch (error) {
