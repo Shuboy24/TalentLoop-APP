@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ResetForm>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(resetPasswordSchema) as any,
   });
 
   const onSubmit = async (data: ResetForm) => {

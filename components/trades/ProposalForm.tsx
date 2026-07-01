@@ -41,7 +41,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
     watch,
     formState: { errors, isSubmitting },
   } = useForm<z.infer<typeof createProposalSchema>>({
-    resolver: zodResolver(createProposalSchema),
+    resolver: zodResolver(createProposalSchema) as any,
     defaultValues: {
       timelineDays: 7,
       acceptanceDeadline: defaultDeadline,
@@ -87,7 +87,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
       <div className="space-y-4">
         <div className="space-y-2">
           <Label>Skill you are offering</Label>
-          <Select onValueChange={(val) => setValue("senderSkillId", val)}>
+          <Select onValueChange={(val) => setValue("senderSkillId", val as string)}>
             <SelectTrigger className={errors.senderSkillId ? "border-error" : ""}>
               <SelectValue placeholder="Select one of your skills" />
             </SelectTrigger>
@@ -102,7 +102,7 @@ export function ProposalForm({ receiverId, myOfferedSkills, theirOfferedSkills, 
 
         <div className="space-y-2">
           <Label>Skill you are requesting</Label>
-          <Select onValueChange={(val) => setValue("receiverSkillId", val)}>
+          <Select onValueChange={(val) => setValue("receiverSkillId", val as string)}>
             <SelectTrigger className={errors.receiverSkillId ? "border-error" : ""}>
               <SelectValue placeholder="Select one of their skills" />
             </SelectTrigger>

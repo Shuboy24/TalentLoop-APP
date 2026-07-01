@@ -50,7 +50,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ pr
     const parsed = respondToProposalSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const { action, declineReason } = parsed.data;
@@ -82,7 +82,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ pr
           userId: proposal.senderId,
           type: "proposal_declined",
           title: "Proposal Declined",
-          body: `${session.user.name || 'The user'} declined your trade proposal.`,
+          body: `${(session.user as any).name || 'The user'} declined your trade proposal.`,
           link: `/trades`
         }
       });
@@ -110,7 +110,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ pr
           userId: proposal.senderId,
           type: "proposal_accepted",
           title: "Proposal Accepted!",
-          body: `${session.user.name || 'The user'} accepted your trade proposal. Action required!`,
+          body: `${(session.user as any).name || 'The user'} accepted your trade proposal. Action required!`,
           link: `/trades/${newTrade.id}`
         }
       });

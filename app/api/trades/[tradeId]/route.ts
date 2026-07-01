@@ -87,7 +87,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ tr
           userId: otherUserId,
           type: "trade_cancelled",
           title: "Trade Cancelled",
-          body: `${session.user.name || 'Your partner'} cancelled the trade.`,
+          body: `${(session.user as any).name || 'Your partner'} cancelled the trade.`,
           link: `/trades/${trade.id}`
         }
       });

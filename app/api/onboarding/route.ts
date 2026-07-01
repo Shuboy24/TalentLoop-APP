@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const parsed = onboardingSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const { bio, location, offeredSkills, neededSkills, availability } = parsed.data;

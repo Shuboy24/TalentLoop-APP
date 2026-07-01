@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const parsed = sendMessageSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const data = parsed.data;
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
         userId: receiverId,
         type: "new_message",
         title: "New Message",
-        body: `${session.user.name || 'Your partner'} sent a new message in your trade.`,
+        body: `${(session.user as any).name || 'Your partner'} sent a new message in your trade.`,
         link: `/trades/${trade.id}`
       }
     });

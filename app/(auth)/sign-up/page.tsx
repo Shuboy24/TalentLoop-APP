@@ -22,7 +22,7 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignUpForm>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema) as any,
   });
 
   const onSubmit = async (data: SignUpForm) => {

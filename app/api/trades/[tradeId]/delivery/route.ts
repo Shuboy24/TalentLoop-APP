@@ -93,7 +93,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ tra
         userId: otherUserId,
         type: "delivery_update",
         title: "Partner Delivered",
-        body: `${session.user.name || 'Your partner'} marked their part as completed. Please confirm yours.`,
+        body: `${(session.user as any).name || 'Your partner'} marked their part as completed. Please confirm yours.`,
         link: `/trades/${trade.id}`
       });
     }

@@ -15,11 +15,11 @@ type Proposal = {
   receiverId: string;
   status: string;
   timelineDays: number;
-  acceptanceDeadline: string;
+  acceptanceDeadline: Date | string;
   senderDeliverables: string;
   receiverDeliverables: string;
   optionalNote?: string | null;
-  createdAt: string;
+  createdAt: Date | string;
   sender: { id: string; name: string; avatarUrl: string | null };
   receiver: { id: string; name: string; avatarUrl: string | null };
   senderSkill: { id: string; name: string; category: string };

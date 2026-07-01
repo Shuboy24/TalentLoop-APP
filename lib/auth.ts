@@ -74,10 +74,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
         
         if (dbUser) {
-          session.user.isAdmin = dbUser.isAdmin;
-          session.user.emailVerified = dbUser.emailVerified;
-          session.user.onboardingComplete = dbUser.onboardingComplete;
-          session.user.isSuspended = dbUser.isSuspended;
+          (session.user as any).isAdmin = dbUser.isAdmin;
+          (session.user as any).emailVerified = dbUser.emailVerified;
+          (session.user as any).onboardingComplete = dbUser.onboardingComplete;
+          (session.user as any).isSuspended = dbUser.isSuspended;
         }
       }
       return session;

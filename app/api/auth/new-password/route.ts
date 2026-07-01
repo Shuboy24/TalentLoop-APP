@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     const parsed = newPasswordSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const { token, password } = parsed.data;

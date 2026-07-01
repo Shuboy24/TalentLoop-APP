@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const parsed = createProposalSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const data = parsed.data;
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
       userId: receiverId,
       type: "proposal_received",
       title: "New Trade Proposal",
-      body: `${session.user.name || 'Someone'} proposed a new trade!`,
+      body: `${(session.user as any).name || 'Someone'} proposed a new trade!`,
       link: `/trades`
     });
 

@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const parseResult = createDisputeSchema.safeParse(body);
     
     if (!parseResult.success) {
-      return NextResponse.json({ success: false, error: "Invalid input", details: parseResult.error.errors }, { status: 400 });
+      return NextResponse.json({ success: false, error: "Invalid input", details: parseResult.error.issues }, { status: 400 });
     }
 
     const { tradeId, reason, reasonDetail, evidenceUrls } = parseResult.data;

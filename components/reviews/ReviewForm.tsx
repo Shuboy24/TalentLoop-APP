@@ -22,7 +22,7 @@ export function ReviewForm({ tradeId, onSuccess }: ReviewFormProps) {
   const router = useRouter();
 
   const form = useForm<CreateReviewFormValues>({
-    resolver: zodResolver(createReviewSchema),
+    resolver: zodResolver(createReviewSchema) as any,
     defaultValues: {
       rating: 0,
       reviewText: "",

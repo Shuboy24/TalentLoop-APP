@@ -3,15 +3,16 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createProposalSchema } from "@/lib/validations/proposal";
 
-export async function POST(request: Request, { params }: { params: { proposalId: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ proposalId: string }> }) {
   try {
+    const { proposalId } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const parentProposal = await db.tradeProposal.findUnique({
-      where: { id: params.proposalId }
+      where: { id: proposalId }
     });
 
     if (!parentProposal) {
@@ -30,7 +31,7 @@ export async function POST(request: Request, { params }: { params: { proposalId:
     const parsed = createProposalSchema.safeParse(body);
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: parsed.error.errors[0].message }, { status: 400 });
+      return NextResponse.json({ success: false, error: parsed.error.issues[0].message }, { status: 400 });
     }
 
     const data = parsed.data;
@@ -62,7 +63,7 @@ export async function POST(request: Request, { params }: { params: { proposalId:
         userId: parentProposal.senderId,
         type: "counter_proposal",
         title: "Counter Proposal Received",
-        body: `${session.user.name || 'The user'} sent a counter-proposal to your trade terms.`,
+        body: `${(session.user as any).name || 'The user'} sent a counter-proposal to your trade terms.`,
         link: `/trades`
       }
     });

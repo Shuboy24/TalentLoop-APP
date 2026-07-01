@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { tradeId: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
+    const { tradeId } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId },
+      where: { id: tradeId },
       include: {
         proposal: {
           include: {
@@ -38,15 +39,16 @@ export async function GET(request: Request, { params }: { params: { tradeId: str
   }
 }
 
-export async function POST(request: Request, { params }: { params: { tradeId: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ tradeId: string }> }) {
   try {
+    const { tradeId } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const trade = await db.trade.findUnique({
-      where: { id: params.tradeId },
+      where: { id: tradeId },
       include: {
         proposal: {
           include: {

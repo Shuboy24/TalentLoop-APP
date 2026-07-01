@@ -26,7 +26,7 @@ function NewPasswordContent() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<NewPasswordForm>({
-    resolver: zodResolver(newPasswordSchema),
+    resolver: zodResolver(newPasswordSchema) as any,
     defaultValues: {
       token: token || "",
     }

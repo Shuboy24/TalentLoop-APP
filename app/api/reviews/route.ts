@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     const parseResult = createReviewSchema.safeParse(body);
     if (!parseResult.success) {
-      return NextResponse.json({ success: false, error: "Invalid input", details: parseResult.error.errors }, { status: 400 });
+      return NextResponse.json({ success: false, error: "Invalid input", details: parseResult.error.issues }, { status: 400 });
     }
 
     const { rating, reviewText } = parseResult.data;

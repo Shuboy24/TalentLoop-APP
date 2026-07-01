@@ -5,7 +5,8 @@ import { TradeCard } from "@/components/trades/TradeCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProposalCard } from "@/components/trades/ProposalCard";
 
-export default async function TradesPage({ searchParams }: { searchParams: { tab?: string } }) {
+export default async function TradesPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const resolvedSearchParams = await searchParams;
   const session = await auth();
   if (!session?.user?.id) {
     redirect("/login");
@@ -54,7 +55,7 @@ export default async function TradesPage({ searchParams }: { searchParams: { tab
         <p className="text-body-md text-neutral-variant-on">Manage your skill exchanges, proposals, and active trades.</p>
       </div>
 
-      <Tabs defaultValue={searchParams.tab || "active"} className="w-full">
+      <Tabs defaultValue={resolvedSearchParams.tab || "active"} className="w-full">
         <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="proposals">Proposals ({proposals.length})</TabsTrigger>
           <TabsTrigger value="active">Active ({activeTrades.length})</TabsTrigger>

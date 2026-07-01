@@ -24,11 +24,10 @@ export function DisputeForm({ tradeId, onSuccess, onCancel }: DisputeFormProps) 
   const router = useRouter();
 
   const form = useForm<z.infer<typeof createDisputeSchema>>({
-    resolver: zodResolver(createDisputeSchema),
+    resolver: zodResolver(createDisputeSchema) as any,
     defaultValues: {
       tradeId,
       reasonDetail: "",
-      evidenceUrls: [],
     },
   });
 

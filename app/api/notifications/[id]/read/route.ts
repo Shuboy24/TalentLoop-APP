@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const notification = await db.notification.findUnique({
-      where: { id: params.id }
+      where: { id }
     });
 
     if (!notification) {
@@ -22,7 +23,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     }
 
     const updated = await db.notification.update({
-      where: { id: params.id },
+      where: { id },
       data: { isRead: true }
     });
 

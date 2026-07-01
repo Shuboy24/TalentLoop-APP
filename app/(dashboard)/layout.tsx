@@ -82,16 +82,16 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         <div className="p-4 border-t border-neutral-variant">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-10 h-10 rounded-full bg-neutral-variant overflow-hidden">
-              {session.user.image ? (
-                <img src={session.user.image} alt="Avatar" className="w-full h-full object-cover" />
+              {(session.user as any).avatarUrl || (session.user as any).image ? (
+                <img src={(session.user as any).avatarUrl || (session.user as any).image} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-neutral-variant-on">
-                  {session.user.name?.charAt(0) || "U"}
+                  {(session.user as any).name?.charAt(0) || "U"}
                 </div>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-body-sm font-medium truncate text-neutral-on">{session.user.name}</p>
+              <p className="text-body-sm font-medium truncate text-neutral-on">{(session.user as any).name}</p>
               <p className="text-label-sm text-neutral-variant-on truncate">Trust Score: {/* Ideally fetch this, but omitted for now */ 100}</p>
             </div>
           </div>
