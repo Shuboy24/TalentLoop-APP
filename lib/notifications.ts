@@ -1,5 +1,7 @@
 import { db } from "./db";
-import { sendEmail } from "./nodemailer";
+import { sendEmail } from "./resend";
+import * as React from "react";
+import { NotificationEmail } from "@/emails/NotificationEmail";
 
 type NotificationType =
   | "match_found"
@@ -49,19 +51,17 @@ export async function createNotification({
       });
 
       if (user?.email) {
-        // Send basic text email for MVP
-        const html = `
-          <h2>${title}</h2>
-          <p>Hi ${user.name},</p>
-          <p>${body}</p>
-          ${link ? `<p><a href="${process.env.NEXTAUTH_URL}${link}">View Details</a></p>` : ""}
-          <p>The TalentLoop Team</p>
-        `;
+        const fullUrl = link ? `${process.env.NEXTAUTH_URL}${link}` : undefined;
 
         await sendEmail({
           to: user.email,
           subject: `TalentLoop: ${title}`,
-          html,
+          react: React.createElement(NotificationEmail, {
+            title,
+            name: user.name,
+            bodyText: body,
+            url: fullUrl
+          }),
         });
       }
     }

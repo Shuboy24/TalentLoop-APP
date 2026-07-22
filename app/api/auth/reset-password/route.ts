@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { resetPasswordSchema } from "@/lib/validations/auth";
 import crypto from "crypto";
-import { sendEmail } from "@/lib/nodemailer";
+import { sendEmail } from "@/lib/resend";
+import * as React from "react";
+import { ResetPasswordEmail } from "@/emails/ResetPasswordEmail";
 
 export async function POST(request: Request) {
   try {
@@ -42,7 +44,7 @@ export async function POST(request: Request) {
     await sendEmail({
       to: email,
       subject: "Reset your TalentLoop password",
-      html: `<p>Click <a href="${resetUrl}">here</a> to reset your password.</p>`
+      react: React.createElement(ResetPasswordEmail, { url: resetUrl })
     });
 
     return NextResponse.json({ success: true, data: null });

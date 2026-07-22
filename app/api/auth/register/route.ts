@@ -3,8 +3,11 @@ import { db } from "@/lib/db";
 import { registerSchema } from "@/lib/validations/auth";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { sendEmail } from "@/lib/nodemailer";
+import { sendEmail } from "@/lib/resend";
 import { BCRYPT_COST_FACTOR } from "@/lib/constants";
+import * as React from "react";
+import { VerifyEmail } from "@/emails/VerifyEmail";
+import { WelcomeEmail } from "@/emails/WelcomeEmail";
 
 export async function POST(request: Request) {
   try {
@@ -55,7 +58,7 @@ export async function POST(request: Request) {
     await sendEmail({
       to: email,
       subject: "Verify your TalentLoop account",
-      html: `<p>Click <a href="${verificationUrl}">here</a> to verify your email.</p>`
+      react: React.createElement(VerifyEmail, { url: verificationUrl })
     });
 
     // Send welcome email
@@ -63,15 +66,7 @@ export async function POST(request: Request) {
     await sendEmail({
       to: email,
       subject: "Welcome to TalentLoop!",
-      html: `
-        <h2>Welcome to TalentLoop, ${firstName}!</h2>
-        <p>We're thrilled to have you join our community.</p>
-        <p>TalentLoop is all about exchanging skills and creating value together without money changing hands.</p>
-        <p>Get started by completing your profile and proposing your first trade!</p>
-        <br/>
-        <p>Best regards,</p>
-        <p>The TalentLoop Team</p>
-      `
+      react: React.createElement(WelcomeEmail, { firstName })
     });
 
     return NextResponse.json({ success: true, data: { userId: user.id } });
